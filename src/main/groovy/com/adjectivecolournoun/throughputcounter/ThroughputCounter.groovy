@@ -26,6 +26,7 @@ abstract class ThroughputCounter {
         if (!(currentCount % reportingInterval)) {
             def currentTime = System.currentTimeMillis()
             def throughput = reportingInterval / ((currentTime - lastTime) / 1000d)
+            lastTime = currentTime
             reportThroughput(currentCount, throughput)
         }
     }

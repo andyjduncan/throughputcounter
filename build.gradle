@@ -7,12 +7,14 @@ version = '1.0'
 
 project.group = 'com.adjectivecolournoun'
 
-repositories {
+repositories {;
     jcenter()
 }
 
 dependencies {
     compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+
+    compile 'org.slf4j:slf4j-api:1.7.7'
 
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0') {
         transitive = false
