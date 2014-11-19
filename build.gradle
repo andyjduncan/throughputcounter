@@ -3,11 +3,21 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.7
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 project.group = 'com.adjectivecolournoun'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5"
+    }
+}
 
 repositories {
     jcenter()
@@ -62,6 +72,32 @@ publishing {
             artifact groovydocJar {
                 classifier 'javadoc'
             }
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+
+    dryRun = false
+    publish = false
+
+    publications = ['mavenJava']
+
+    pkg {
+        repo = 'maven'
+        name = 'throughputcounter'
+        desc = 'Useful throughput counters'
+
+        websiteUrl = 'https://github.com/andyjduncan/throughputcounter'
+        vcsUrl = 'https://github.com/andyjduncan/throughputcounter.git'
+        issueTrackerUrl = 'https://github.com/andyjduncan/throughputcounter/issues'
+
+        licenses = ['Apache-2.0']
+
+        version {
+            vcsTag = project.version
         }
     }
 }
