@@ -1,13 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
-version = '1.0'
+version = '1.0.0-SNAPSHOT'
 
 project.group = 'com.adjectivecolournoun'
 
-repositories {;
+repositories {
     jcenter()
 }
 
@@ -20,6 +22,48 @@ dependencies {
         transitive = false
     }
     testCompile 'junit:junit:4.11'
+}
+
+groovydoc {
+    groovyClasspath = configurations.compile
+    link 'https://docs.oracle.com/javase/7/docs/api/', 'java.lang.', 'java.util.'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.groovy
+    classifier = 'sources'
+}
+
+task groovydocJar(type: Jar, dependsOn: 'groovydoc') {
+    from groovydoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task exportJavadoc(type: Copy, dependsOn: 'groovydoc') {
+    from groovydoc.destinationDir
+    into 'javadoc'
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives groovydocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            artifact groovydocJar {
+                classifier 'javadoc'
+            }
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {

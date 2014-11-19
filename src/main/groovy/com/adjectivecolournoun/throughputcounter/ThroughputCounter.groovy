@@ -27,8 +27,17 @@ abstract class ThroughputCounter {
             def currentTime = System.currentTimeMillis()
             def throughput = reportingInterval / ((currentTime - lastTime) / 1000d)
             lastTime = currentTime
-            reportThroughput(currentCount, throughput)
+            reportThroughput currentCount, throughput
         }
+    }
+
+    void stop() {
+        def finalCount = counter.get()
+
+        def currentTime = System.currentTimeMillis()
+        def throughput = finalCount / ((currentTime - startTime) / 1000d)
+
+        reportThroughput finalCount, throughput
     }
 
     protected abstract reportThroughput(long currentCount, double throughput)

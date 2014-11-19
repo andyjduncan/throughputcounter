@@ -31,6 +31,19 @@ class TestThroughputCounter extends Specification {
         then:
         counter.printed ==~ /10\t[,\d]+\.\d{3} per second/
     }
+
+    void 'prints overall throughput when stopped'() {
+        given:
+        def counter = new AssertableCounter(10)
+
+        when:
+        sleep 10
+        counter.count()
+        counter.stop()
+
+        then:
+        counter.printed ==~ /1\t[,\d]+\.\d{3} per second/
+    }
 }
 
 @InheritConstructors
